@@ -80,6 +80,13 @@ jobs:
       env:
         CERT_PEM: ${{ secrets.CERT_PEM }}
 
+    - name: Write terraform.tfvars
+      run: |
+        mkdir -p ~/.oci
+        echo "${TF_VARS}" > terraform.tfvars
+      env:
+        TF_VARS: ${{ secrets.TF_VARS }}
+
     - name: Terraform Init
       run: terraform init
 
