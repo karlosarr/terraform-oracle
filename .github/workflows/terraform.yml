@@ -54,34 +54,40 @@ permissions:
 
 jobs:
   terraform:
-    name: 'Terraform'
     runs-on: ubuntu-latest
     environment: production
-
-    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
       run:
         shell: bash
 
     steps:
-    # Checkout the repository to the GitHub Actions runner
     - name: Checkout
       uses: actions/checkout@v4
 
-    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+    # Guardar FILE_CONFIG en ~/.oci/config
+    - name: Write OCI config
+      run: |
+        mkdir -p ~/.oci
+        echo "${FILE_CONFIG}" > ~/.oci/config
+      env:
+        FILE_CONFIG: ${{ secrets.FILE_CONFIG }}
+
+    # Guardar CERT_PEM en /tmp/cert.pem
+    - name: Write cert.pem
+      run: |
+        echo "${CERT_PEM}" > /tmp/cert.pem
+      env:
+        CERT_PEM: ${{ secrets.CERT_PEM }}
+
     - name: Terraform Init
       run: terraform init
 
-    # Checks that all Terraform configuration files adhere to a canonical format
     - name: Terraform Format
       run: terraform fmt -check
 
-    # Generates an execution plan for Terraform
     - name: Terraform Plan
       run: terraform plan -input=false
 
-      # On push to "main", build or change infrastructure according to Terraform configuration files
-      # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
     - name: Terraform Apply
-      if: github.ref == 'refs/heads/"main"' && github.event_name == 'push'
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       run: terraform apply -auto-approve -input=false
