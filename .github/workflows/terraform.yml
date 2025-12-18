@@ -82,7 +82,6 @@ jobs:
 
     - name: Write terraform.tfvars
       run: |
-        mkdir -p ~/.oci
         echo "${TF_VARS}" > terraform.tfvars
       env:
         TF_VARS: ${{ secrets.TF_VARS }}
