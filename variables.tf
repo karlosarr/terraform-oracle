@@ -3,18 +3,18 @@ variable "compartment_id" {
   description = "The compartment ID for the instance"
 }
 variable "subnet_id" {
-  type = string
+  type        = string
   description = "The subnet ID for the instance "
 }
 variable "availability_domain" {
-  type = string
+  type        = string
   description = "The availability domain for the instance"
-  default = "TTSC:US-SANJOSE-1-AD-1"
+  default     = "TTSC:US-SANJOSE-1-AD-1"
 }
 variable "display_name" {
-  type = string
+  type        = string
   description = "The display name for the instance"
-  default = "services-instance"
+  default     = "services-instance"
 }
 variable "shape" {
   type        = string
@@ -45,6 +45,6 @@ variable "oci_version" {
   default     = "~> 7.29.0"
 }
 variable "tenancy_ocid" {
-    type = string
-    description = "The OCID of the tenancy"
+  type        = string
+  description = "The OCID of the tenancy"
 }
